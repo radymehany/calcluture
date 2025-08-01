@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دراسة جدوى لشركات التوصيل - Rady Mehany</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          darkMode: 'class',
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        input[type="number"] {
+            text-align: center;
+            font-weight: 700;
+        }
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        /* Dark mode toggle styles */
+        .toggle-checkbox:checked {
+            transform: translateX(100%);
+            background-color: #4A90E2;
+        }
+        .toggle-label {
+            transition: background-color 0.2s ease-in-out;
+        }
+        /* --- Print Styles --- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                font-size: 9pt;
+                margin: 0;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            main {
+                display: block !important;
+            }
+            aside {
+                width: 100% !important;
+                position: static !important;
+                box-shadow: none !important;
+                border: none !important;
+                page-break-inside: avoid;
+            }
+            .result-box {
+                background-color: #ffffff !important;
+                border: 1px solid #000 !important;
+                padding: 0.2rem;
+                margin-bottom: 0.4rem !important;
+            }
+             .result-box h3 {
+                font-size: 0.9rem;
+                margin-bottom: 0;
+             }
+             .result-value {
+                font-size: 1.1rem;
+             }
+            #print-header { margin-bottom: 0.5rem !important; }
+            #print-header h1 { text-align: center; font-size: 1.2rem; }
+            #print-header p { text-align: center; font-size: 0.8rem;}
+            #print-summary {
+                display: block !important;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 0.4rem;
+            }
+            .print-table td {
+                border: 1px solid #ccc;
+                padding: 3px 5px;
+            }
+             .print-table tr td:last-child {
+                font-weight: bold;
+                text-align: left;
+                white-space: nowrap;
+             }
+             #print-footer {
+                display: block !important;
+                position: fixed;
+                bottom: 10px;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 8pt;
+                color: #6b7280;
+             }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <div class="container mx-auto">
+        <header class="text-center mb-4 pt-4">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">دراسة الجدوى لشركات التوصيل</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">مقدمة من / Rady Mehany</p>
+            <div class="flex justify-center items-center mt-4 space-x-4">
+                <p class="text-lg text-gray-600 dark:text-gray-400">الوضع الليلي</p>
+                <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                    <label for="dark-mode-toggle" class="toggle-label block w-12 h-7 rounded-full bg-gray-300 dark:bg-gray-600 cursor-pointer"></label>
+                    <input type="checkbox" name="toggle" id="dark-mode-toggle" class="toggle-checkbox absolute top-0.5 right-0.5 block w-6 h-6 rounded-full bg-white dark:bg-gray-400 border-2 border-gray-300 dark:border-gray-500 appearance-none cursor-pointer transition-transform duration-300 ease-in-out"/>
+                </div>
+            </div>
+        </header>
+
+        <div class="text-center my-6">
+             <button onclick="window.print()" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 shadow-lg no-print">
+                🖨️ طباعة التقرير
+            </button>
+        </div>
+
+
+        <div id="print-header" class="hidden print:block mb-8">
+            <h1 class="text-2xl font-bold">تقرير دراسة الجدوى المالية</h1>
+            <p id="print-date" class="text-sm text-gray-600"></p>
+        </div>
+
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <section class="lg:col-span-2 space-y-6 no-print">
+                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">المدخلات الأساسية للمشروع</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="companies" class="block text-sm font-medium text-gray-700 dark:text-gray-300">عدد شركات التوصيل</label>
+                            <input type="number" id="companies" value="8" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="officeRent" class="block text-sm font-medium text-gray-700 dark:text-gray-300">إيجار المكتب للشركة الواحدة (د.ك)</label>
+                            <input type="number" id="officeRent" value="250" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="adminStaffCount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">عدد الموظفين الإداريين (الإجمالي)</label>
+                            <input type="number" id="adminStaffCount" value="21" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                        </div>
+                    </div>
+                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">**ملاحظة:** راتب كل إداري ثابت (250 د.ك).</p>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">مدخلات الأسطول (للشركة الواحدة)</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg space-y-2">
+                            <h3 class="font-bold mb-2 text-gray-800 dark:text-white">السيارات</h3>
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">عدد السيارات لكل شركة</label>
+                            <input type="number" id="carsPerCompany" value="70" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">راتب السائق (د.ك)</label>
+                            <input type="number" id="carDriverSalary" value="150" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                             <label class="block text-sm text-gray-700 dark:text-gray-300">سكن (د.ك)</label>
+                            <input type="number" id="carHousing" value="20" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">بنزين (د.ك)</label>
+                            <input type="number" id="carFuel" value="50" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">قسط السيارة (د.ك)</label>
+                            <input type="number" id="carInstallment" value="180" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">تأمين السيارة (د.ك)</label>
+                            <input type="number" id="carInsurance" value="15" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                        </div>
+                        <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg space-y-2">
+                            <h3 class="font-bold mb-2 text-gray-800 dark:text-white">السياكل</h3>
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">عدد السياكل لكل شركة</label>
+                            <input type="number" id="bikesPerCompany" value="20" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">راتب السائق (د.ك)</label>
+                            <input type="number" id="bikeRiderSalary" value="150" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">سكن (د.ك)</label>
+                            <input type="number" id="bikeHousing" value="20" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <label class="block text-sm text-gray-700 dark:text-gray-300">بنزين (د.ك)</label>
+                            <input type="number" id="bikeFuel" value="20" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                             <label class="block text-sm text-gray-700 dark:text-gray-300">قسط السيكل (د.ك)</label>
+                            <input type="number" id="bikeInstallment" value="60" class="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">مدخلات الإيرادات</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="avgOrders" class="block text-sm font-medium text-gray-700 dark:text-gray-300">متوسط الطلبات الشهرية للسائق الواحد</label>
+                            <input type="number" id="avgOrders" value="400" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label for="avgOrderPrice" class="block text-sm font-medium text-gray-700 dark:text-gray-300">متوسط سعر الطلب المحصّل (د.ك)</label>
+                            <input type="number" id="avgOrderPrice" step="0.05" value="1.35" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 lg:sticky top-8">
+                    <h2 class="text-2xl font-extrabold text-center mb-6 no-print">الخلاصة المالية الشهرية</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-center result-box">
+                            <h3 class="text-lg font-bold text-blue-800 dark:text-blue-300">إجمالي الإيرادات</h3>
+                            <p id="totalRevenue" class="result-value text-blue-700 dark:text-blue-400">0 د.ك</p>
+                        </div>
+                        
+                        <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-center result-box">
+                            <h3 class="text-lg font-bold text-red-800 dark:text-red-300">إجمالي التكاليف</h3>
+                            <p id="totalCosts" class="result-value text-red-700 dark:text-red-400">0 د.ك</p>
+                        </div>
+
+                        <div class="p-4 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg text-center border-2 border-indigo-200 dark:border-indigo-500 result-box">
+                            <h3 class="text-xl font-extrabold text-indigo-900 dark:text-indigo-200">صافي الربح التشغيلي</h3>
+                            <p id="operatingProfit" class="result-value text-indigo-600 dark:text-indigo-300" style="font-size: 2rem;">0 د.ك</p>
+                        </div>
+                    </div>
+
+                    <div id="kpi-details" class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 space-y-3 text-center no-print">
+                        <h4 class="font-bold text-lg mb-2">مؤشرات الأداء الرئيسية</h4>
+                        <div class="text-base">
+                            <strong>هامش الربح:</strong> 
+                            <span id="kpiProfitMargin" class="font-bold text-green-600 dark:text-green-400 text-lg">0%</span>
+                        </div>
+                        <div class="text-base">
+                            <strong>الإيراد لكل سائق:</strong>
+                            <span id="kpiRevenuePerDriver" class="font-bold text-blue-600 dark:text-blue-400 text-lg">0 د.ك</span>
+                        </div>
+                         <div class="text-base">
+                            <strong>الربح الصافي لكل سائق:</strong>
+                            <span id="kpiProfitPerDriver" class="font-bold text-indigo-600 dark:text-indigo-400 text-lg">0 د.ك</span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 no-print dark:border-gray-600">
+                    <div id="details" class="space-y-2 text-sm no-print text-center">
+                        <h4 class="font-bold text-lg mb-2">تفاصيل سريعة</h4>
+                        <p><strong>التكاليف الثابتة:</strong> <span id="detailFixed" class="font-bold text-base">0</span> د.ك</p>
+                        <p><strong>تكاليف متغيرة:</strong> <span id="detailVariable" class="font-bold text-base">0</span> د.ك</p>
+                        <p><strong>إجمالي السائقين:</strong> <span id="detailDrivers" class="font-bold text-base">0</span></p>
+                    </div>
+
+                    <div id="print-summary" class="hidden"></div>
+                </div>
+            </aside>
+        </main>
+
+        <footer id="print-footer" class="hidden">
+            Prepared by: Eng. Rady Mahany | &copy; 2025
+        </footer>
+    </div>
+
+<script>
+    // --- Dark Mode Logic ---
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const htmlElement = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'dark') {
+        htmlElement.classList.add('dark');
+        darkModeToggle.checked = true;
+    }
+
+    darkModeToggle.addEventListener('change', () => {
+        if (darkModeToggle.checked) {
+            htmlElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            htmlElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // --- Calculation Logic ---
+    function getInputs() {
+         return {
+            companies: parseFloat(document.getElementById('companies').value) || 0,
+            officeRent: parseFloat(document.getElementById('officeRent').value) || 0,
+            adminStaffCount: parseFloat(document.getElementById('adminStaffCount').value) || 0,
+            carsPerCompany: parseFloat(document.getElementById('carsPerCompany').value) || 0,
+            carDriverSalary: parseFloat(document.getElementById('carDriverSalary').value) || 0,
+            carHousing: parseFloat(document.getElementById('carHousing').value) || 0,
+            carFuel: parseFloat(document.getElementById('carFuel').value) || 0,
+            carInstallment: parseFloat(document.getElementById('carInstallment').value) || 0,
+            carInsurance: parseFloat(document.getElementById('carInsurance').value) || 0,
+            bikesPerCompany: parseFloat(document.getElementById('bikesPerCompany').value) || 0,
+            bikeRiderSalary: parseFloat(document.getElementById('bikeRiderSalary').value) || 0,
+            bikeHousing: parseFloat(document.getElementById('bikeHousing').value) || 0,
+            bikeFuel: parseFloat(document.getElementById('bikeFuel').value) || 0,
+            bikeInstallment: parseFloat(document.getElementById('bikeInstallment').value) || 0,
+            avgOrders: parseFloat(document.getElementById('avgOrders').value) || 0,
+            avgOrderPrice: parseFloat(document.getElementById('avgOrderPrice').value) || 0,
+        };
+    }
+    
+    function calculateData(V) {
+        const adminSalaryCost = V.adminStaffCount * 250; 
+        const totalRentCost = V.officeRent * V.companies;
+        const fixedCosts = adminSalaryCost + totalRentCost;
+
+        const totalCars = V.companies * V.carsPerCompany;
+        const totalBikes = V.companies * V.bikesPerCompany;
+        const totalDrivers = totalCars + totalBikes;
+
+        const totalDriverSalaries = (totalCars * V.carDriverSalary) + (totalBikes * V.bikeRiderSalary);
+        const totalHousingCost = (totalCars * V.carHousing) + (totalBikes * V.bikeHousing);
+        const totalFuelCost = (totalCars * V.carFuel) + (totalBikes * V.bikeFuel);
+        const totalInstallmentCost = (totalCars * V.carInstallment) + (totalBikes * V.bikeInstallment);
+        const totalInsuranceCost = totalCars * V.carInsurance;
+        
+        const variableCosts = totalDriverSalaries + totalHousingCost + totalFuelCost + totalInstallmentCost + totalInsuranceCost;
+        const totalCosts = fixedCosts + variableCosts;
+
+        const totalRevenue = (totalDrivers * V.avgOrders) * V.avgOrderPrice;
+        const operatingProfit = totalRevenue - totalCosts;
+
+        const profitMargin = totalRevenue > 0 ? (operatingProfit / totalRevenue) * 100 : 0;
+        const revenuePerDriver = totalDrivers > 0 ? totalRevenue / totalDrivers : 0;
+        const profitPerDriver = totalDrivers > 0 ? operatingProfit / totalDrivers : 0;
+        
+        return { V, adminSalaryCost, totalRentCost, fixedCosts, totalCars, totalBikes, totalDrivers, totalDriverSalaries, totalHousingCost, totalFuelCost, totalInstallmentCost, totalInsuranceCost, variableCosts, totalCosts, totalRevenue, operatingProfit, profitMargin, revenuePerDriver, profitPerDriver };
+    }
+
+    function updateDisplay(data) {
+        const { V, fixedCosts, variableCosts, totalDrivers, totalRevenue, totalCosts, operatingProfit, profitMargin, revenuePerDriver, profitPerDriver, adminSalaryCost, totalRentCost, totalDriverSalaries, totalHousingCost, totalFuelCost, totalInstallmentCost, totalInsuranceCost } = data;
+        const formatCurrency = (num) => `${num.toLocaleString('en-US', {maximumFractionDigits: 0})} د.ك`;
+        
+        // Main Results
+        document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+        document.getElementById('totalCosts').textContent = formatCurrency(totalCosts);
+        document.getElementById('operatingProfit').textContent = formatCurrency(operatingProfit);
+        
+        // KPIs
+        document.getElementById('kpiProfitMargin').textContent = `${profitMargin.toFixed(1)}%`;
+        document.getElementById('kpiRevenuePerDriver').textContent = formatCurrency(revenuePerDriver);
+        document.getElementById('kpiProfitPerDriver').textContent = formatCurrency(profitPerDriver);
+
+        // Quick Details
+        document.getElementById('detailFixed').textContent = formatCurrency(fixedCosts);
+        document.getElementById('detailVariable').textContent = formatCurrency(variableCosts);
+        document.getElementById('detailDrivers').textContent = totalDrivers;
+
+
+        // Print Summary
+        const summaryContainer = document.getElementById('print-summary');
+        summaryContainer.innerHTML = `
+            <div class="mt-4">
+                <h3 class="font-bold text-lg mb-2 text-center" style="font-size: 1.1rem;">تفاصيل التكاليف</h3>
+                <table class="print-table">
+                    <tr><td colspan="2" style="background-color: #f3f4f6; font-weight: bold;">التكاليف الثابتة</td></tr>
+                    <tr><td>رواتب الإداريين (${V.adminStaffCount} موظف)</td><td>${formatCurrency(adminSalaryCost)}</td></tr>
+                    <tr><td>إجمالي الإيجارات (${V.companies} مكتب)</td><td>${formatCurrency(totalRentCost)}</td></tr>
+                    <tr style="font-weight: bold; border-top: 2px solid #333;"><td>إجمالي التكاليف الثابتة</td><td>${formatCurrency(fixedCosts)}</td></tr>
+                    
+                    <tr><td colspan="2" style="background-color: #f3f4f6; font-weight: bold; padding-top: 8px;">التكاليف المتغيرة</td></tr>
+                    <tr><td>رواتب السائقين (${totalDrivers} سائق)</td><td>${formatCurrency(totalDriverSalaries)}</td></tr>
+                    <tr><td>تكاليف السكن</td><td>${formatCurrency(totalHousingCost)}</td></tr>
+                    <tr><td>تكاليف الوقود</td><td>${formatCurrency(totalFuelCost)}</td></tr>
+                    <tr><td>تكاليف الأقساط</td><td>${formatCurrency(totalInstallmentCost)}</td></tr>
+                    <tr><td>تكاليف التأمين (للسيارات)</td><td>${formatCurrency(totalInsuranceCost)}</td></tr>
+                    <tr style="font-weight: bold; border-top: 2px solid #333;"><td>إجمالي التكاليف المتغيرة</td><td>${formatCurrency(variableCosts)}</td></tr>
+                </table>
+                 <div style="border-top: 3px double #000; margin-top: 1rem; padding-top: 0.5rem;">
+                    <h3 class="font-bold text-lg mb-2 text-center" style="font-size: 1.1rem;">افتراضات التشغيل والإيرادات</h3>
+                     <p style="text-align:center; font-size: 0.9rem;">
+                        <strong>إجمالي السائقين:</strong> ${totalDrivers} | 
+                        <strong>متوسط الطلبات للسائق:</strong> ${V.avgOrders} | 
+                        <strong>متوسط سعر الطلب:</strong> ${V.avgOrderPrice.toFixed(3)} د.ك
+                    </p>
+                </div>
+            </div>
+        `;
+        document.getElementById('print-date').textContent = `تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG-u-nu-latn', {year: 'numeric', month: 'long', day: 'numeric'})}`;
+    }
+
+    function run() {
+        const inputs = getInputs();
+        const data = calculateData(inputs);
+        updateDisplay(data);
+    }
+    
+    const allInputs = document.querySelectorAll('input[type="number"]');
+    allInputs.forEach(input => {
+        input.addEventListener('input', run);
+    });
+
+    document.addEventListener('DOMContentLoaded', run);
+</script>
+</body>
+</html>
